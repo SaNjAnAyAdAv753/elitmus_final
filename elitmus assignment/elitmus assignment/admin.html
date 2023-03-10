@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elitmus Test</title>
+    <!-- <link rel="stylesheet" href="style.css"> -->
+    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-storage.js"></script>
+<style>
+  td{
+    text-align: center;
+    padding: 0px 40px 0px 40px;
+  }
+</style>
+
+</head>
+<body>
+    <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Test Invitation Code</th>
+            <th>Timestamp</th>
+            <th>Pictures</th>
+          </tr>
+        </thead>
+        <tbody id="users-table">
+        </tbody>
+      </table>
+      <img id="myImage" alt="Example Image">
+</body>
+<script>
+    // Your web app's Firebase configuration
+var firebaseConfig = {
+  // Your Firebase project config
+    apiKey: "AIzaSyDtrpE23c0PtIi1XM7ReFSp4CTYL_x0sZ0",
+    authDomain: "elitmus-be920.firebaseapp.com",
+    projectId: "elitmus-be920",
+    storageBucket: "elitmus-be920.appspot.com",
+    messagingSenderId: "984393996682",
+    appId: "1:984393996682:web:e20923bfe2fd28bbe9d073",
+    measurementId: "G-VZXVLW5WLM"
+};
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+
+// Initialize Firestore
+var db = firebase.firestore();
+db.collection("form_data").get().then((querySnapshot) => {
+  querySnapshot.forEach((doc) => {
+    // doc.data() is an object containing the data in each document
+    console.log(doc.id, " => ", doc.data());
+  });
+});
+var usersTable = document.getElementById("users-table");
+
+db.collection("form_data").get().then((querySnapshot) => {
+  querySnapshot.forEach((doc) => {
+    // doc.data() is an object containing the data in each document
+    var user = doc.data();
+    
+    // Create a new row for each user
+    var row = document.createElement("tr");
+    
+    // Add the user's name to the first column
+    var nameCell = document.createElement("td");
+    nameCell.innerText = user.name;
+    row.appendChild(nameCell);
+    
+    // Add the user's email to the second column
+    var emailCell = document.createElement("td");
+    emailCell.innerText = user.email;
+    row.appendChild(emailCell);
+    
+    // Add the user's age to the third column
+    var testPasswordCell = document.createElement("td");
+    testPasswordCell.innerText = user.testPassword;
+    row.appendChild(testPasswordCell);
+
+    var timestampcell=document.createElement("td");
+    var time = new Date(user.createdAt/1000)
+    timestampcell.innerText=time;
+    row.appendChild(timestampcell);
+
+    var linkToPictures=document.createElement("td");
+    linkToPictures.innerText = user.pics.join('\r\n -------  \n ');
+    row.appendChild(linkToPictures);
+    usersTable.appendChild(row);
+  });
+});
+
+
+
+</script>
+</html>
